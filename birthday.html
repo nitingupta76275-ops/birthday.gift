@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Birthday Surprise ❤️</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffe0ec, #f8d7ff, #fff0f5);
+  color: #74364f;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 35px 18px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  animation: fade 0.7s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-size: clamp(30px, 7vw, 48px);
+  margin-bottom: 18px;
+  color: #d63384;
+}
+
+h2 {
+  margin-bottom: 18px;
+  color: #c23d7a;
+}
+
+p {
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: 550px;
+  margin: 10px auto;
+}
+
+button, .upload-label {
+  background: linear-gradient(135deg, #ff5e9c, #d63384);
+  color: white;
+  border: none;
+  padding: 14px 27px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 12px 5px;
+  box-shadow: 0 5px 15px #e68bad66;
+  transition: 0.3s;
+}
+
+button:hover, .upload-label:hover {
+  transform: scale(1.06);
+}
+
+.secondary {
+  background: white;
+  color: #d63384;
+}
+
+.heart {
+  font-size: 75px;
+  animation: heartbeat 1.2s infinite;
+}
+
+@keyframes heartbeat {
+  50% { transform: scale(1.2); }
+}
+
+.card {
+  background: #ffffffc9;
+  width: min(100%, 650px);
+  padding: 30px 20px;
+  border-radius: 25px;
+  box-shadow: 0 10px 35px #c45a8930;
+  backdrop-filter: blur(10px);
+}
+
+input[type="text"] {
+  padding: 13px;
+  width: min(100%, 300px);
+  border: 1px solid #f3a9c8;
+  border-radius: 15px;
+  margin: 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-label {
+  display: inline-block;
+}
+
+#mediaDisplay {
+  width: 100%;
+  max-width: 500px;
+  max-height: 55vh;
+  object-fit: contain;
+  border-radius: 20px;
+  margin: 15px auto;
+  background: #fff;
+}
+
+#videoDisplay {
+  width: 100%;
+  max-width: 500px;
+  max-height: 55vh;
+  border-radius: 20px;
+  margin: 15px auto;
+}
+
+.counter {
+  color: #a34d70;
+  font-size: 14px;
+  margin: 10px;
+}
+
+.progress {
+  width: min(90%, 400px);
+  height: 7px;
+  background: #f4c5d9;
+  border-radius: 20px;
+  margin: 15px;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0;
+  background: #d63384;
+  transition: 0.3s;
+}
+
+#finalMessage {
+  white-space: pre-line;
+}
+
+.floating {
+  position: fixed;
+  top: -30px;
+  pointer-events: none;
+  animation: fall 6s linear forwards;
+  z-index: 10;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.small {
+  font-size: 13px;
+  color: #a35b79;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1: WELCOME -->
+<section class="screen active" id="welcome">
+  <div class="card">
+    <div class="heart">💗</div>
+    <h1>Hey, Beautiful!</h1>
+    <p>Someone has planned a little surprise for you.</p>
+    <p>It's not an ordinary day... someone special was born today! 🎀</p>
+    <button onclick="showScreen('setup')">
+      Open Your Surprise ✨
+    </button>
+  </div>
+</section>
+
+<!-- SCREEN 2: PERSONALIZATION -->
+<section class="screen" id="setup">
+  <div class="card">
+    <div class="heart">🎀</div>
+    <h1>Before We Begin...</h1>
+    <p>What should I call you?</p>
+    <input type="text" id="personName" placeholder="Enter her name">
+    <p>And who is sending this surprise?</p>
+    <input type="text" id="senderName" placeholder="Your name">
+    <br>
+    <button onclick="saveNames()">Let's Go ❤️</button>
+  </div>
+</section>
+
+<!-- SCREEN 3: UPLOAD MEDIA -->
+<section class="screen" id="upload">
+  <div class="card">
+    <h1>Our Little Memories 📸</h1>
+    <p>Select the photos and videos you want to include.</p>
+
+    <label class="upload-label" for="mediaFiles">
+      + Select Photos & Videos
+    </label>
+    <input type="file" id="mediaFiles"
+      accept="image/*,video/*" multiple>
+
+    <p id="fileCount">No files selected yet.</p>
+    <p class="small">
+      Tip: Select your photos and videos together.
+      They will appear in the order you select them.
+    </p>
+
+    <button onclick="startShow()">Start the Memories 💕</button>
+    <br>
+    <button class="secondary" onclick="showScreen('setup')">
+      Back
+    </button>
+  </div>
+</section>
+
+<!-- SCREEN 4: PHOTO & VIDEO SLIDESHOW -->
+<section class="screen" id="memories">
+  <div class="card">
+    <h2 id="memoryTitle">A Beautiful Memory ❤️</h2>
+
+    <img id="mediaDisplay" style="display:none" alt="Our memory">
+
+    <video id="videoDisplay" controls playsinline
+      style="display:none"></video>
+
+    <p id="mediaCaption">Every memory has a story...</p>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <div class="counter" id="counter"></div>
+
+    <button class="secondary" onclick="previousMedia()">
+      ← Back
+    </button>
+    <button onclick="nextMedia()">
+      Next Memory 💗 →
+    </button>
+  </div>
+</section>
+
+<!-- SCREEN 5: PERSONAL MESSAGE -->
+<section class="screen" id="message">
+  <div class="card">
+    <div class="heart">💌</div>
+    <h1>A Little Message For You</h1>
+
+    <p id="personalMessage">
+      Some people make ordinary days feel special,
+      and you are one of them.
+
+      I hope your birthday is filled with happiness,
+      laughter, beautiful moments and everything
+      your heart wishes for.
+
+      Keep smiling and keep shining. ❤️
+    </p>
+
+    <button onclick="showScreen('final')">
+      One Last Surprise 🎁
+    </button>
+  </div>
+</section>
+
+<!-- SCREEN 6: FINAL SURPRISE -->
+<section class="screen" id="final">
+  <div class="card">
+    <div class="heart">🎂</div>
+    <h1>Happy Birthday! ❤️</h1>
+
+    <h2 id="finalName">Someone Special</h2>
+
+    <p id="finalMessage">
+      May your smile always stay this beautiful.
+      May every dream come true.
+
+      You deserve all the happiness in the world.
+
+      Happy Birthday once again! 💗
+    </p>
+
+    <div style="font-size:55px;margin:15px">
+      🎂 🎈 🥳 💐
+    </div>
+
+    <p>Made with lots of love ❤️</p>
+
+    <button onclick="celebrate()">Celebrate Again 🎉</button>
+    <button class="secondary" onclick="showScreen('welcome')">
+      Start Again
+    </button>
+  </div>
+</section>
+
+<script>
+let selectedFiles = [];
+let currentIndex = 0;
+let person = "Beautiful";
+let sender = "Someone Special";
+let currentURL = null;
+
+const fileInput = document.getElementById("mediaFiles");
+const image = document.getElementById("mediaDisplay");
+const video = document.getElementById("videoDisplay");
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+}
+
+function saveNames() {
+  person = document.getElementById("personName").value.trim()
+    || "Beautiful";
+
+  sender = document.getElementById("senderName").value.trim()
+    || "Someone Special";
+
+  document.getElementById("finalName").textContent = person;
+
+  document.getElementById("personalMessage").textContent =
+    `Dear ${person},
+
+Some people make ordinary days feel special,
+and you are one of them.
+
+I hope your birthday is filled with happiness,
+laughter, beautiful moments and everything
+your heart wishes for.
+
+Keep smiling and keep shining. ❤️
+
+With love,
+${sender}`;
+
+  document.getElementById("finalMessage").textContent =
+    `May your smile always stay this beautiful.
+May every dream come true.
+
+You deserve all the happiness in the world.
+
+Happy Birthday, ${person}! 💗`;
+
+  showScreen("upload");
+}
+
+fileInput.addEventListener("change", function() {
+  selectedFiles = Array.from(this.files);
+
+  document.getElementById("fileCount").textContent =
+    selectedFiles.length
+      ? `${selectedFiles.length} memories selected ❤️`
+      : "No files selected yet.";
+});
+
+function startShow() {
+  if (selectedFiles.length === 0) {
+    alert("Please select at least one photo or video first!");
+    return;
+  }
+
+  currentIndex = 0;
+  showScreen("memories");
+  displayMedia();
+}
+
+function displayMedia() {
+  if (currentURL) {
+    URL.revokeObjectURL(currentURL);
+    currentURL = null;
+  }
+
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+
+  image.style.display = "none";
+  video.style.display = "none";
+
+  const file = selectedFiles[currentIndex];
+  currentURL = URL.createObjectURL(file);
+
+  if (file.type.startsWith("image/")) {
+    image.src = currentURL;
+    image.style.display = "block";
+    document.getElementById("memoryTitle").textContent =
+      "A Beautiful Memory 📸";
+  } else if (file.type.startsWith("video/")) {
+    video.src = currentURL;
+    video.style.display = "block";
+    document.getElementById("memoryTitle").textContent =
+      "A Special Moment 🎥";
+  }
+
+  document.getElementById("mediaCaption").textContent =
+    `A little memory to make you smile, ${person} ❤️`;
+
+  document.getElementById("counter").textContent =
+    `Memory ${currentIndex + 1} of ${selectedFiles.length}`;
+
+  document.getElementById("progressBar").style.width =
+    ((currentIndex + 1) / selectedFiles.length * 100) + "%";
+}
+
+function nextMedia() {
+  if (currentIndex < selectedFiles.length - 1) {
+    currentIndex++;
+    displayMedia();
+  } else {
+    showScreen("message");
+  }
+}
+
+function previousMedia() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    displayMedia();
+  } else {
+    showScreen("upload");
+  }
+}
+
+function celebrate() {
+  for (let i = 0; i < 55; i++) {
+    const item = document.createElement("div");
+    item.className = "floating";
+    item.textContent =
+      ["❤️", "💕", "🌸", "✨", "🎉", "💗"][
+        Math.floor(Math.random() * 6)
+      ];
+
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.fontSize = (18 + Math.random() * 22) + "px";
+    item.style.animationDuration = (3 + Math.random() * 4) + "s";
+
+    document.body.appendChild(item);
+
+    setTimeout(() => item.remove(), 7000);
+  }
+}
+
+window.addEventListener("beforeunload", () => {
+  if (currentURL) URL.revokeObjectURL(currentURL);
+});
+</script>
+
+</body>
+</html>
